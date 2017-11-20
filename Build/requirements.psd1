@@ -26,8 +26,4 @@
         DependencyType = 'PSGalleryNuget'
         Version = '1.11.1'
     }
-    'platyPS' = @{
-        DependencyType = 'PSGalleryNuget'
-        Version = '0.7.6'
-    }
 }

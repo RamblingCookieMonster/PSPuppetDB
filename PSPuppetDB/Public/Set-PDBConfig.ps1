@@ -50,5 +50,5 @@
 
     #Write the global variable and the xml
     $Script:PSPDB = $Existing
-    $Existing | Select -Property * -ExcludeProperty Session | Export-Clixml -Path $Path -Force
+    $Existing | Select-Object -Property * -ExcludeProperty Session | Export-Clixml -Path $Path -Force
 }

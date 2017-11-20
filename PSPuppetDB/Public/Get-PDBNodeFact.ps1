@@ -8,7 +8,7 @@
         Get-PDBNode host.fqdn
     #>
     [cmdletbinding()]
-    Param ( 
+    Param (
         [parameter(position=1)]
         [string]
         $Node,
@@ -17,7 +17,7 @@
         [string]
         $Name,
 
-        [ValidateNotNull()] 
+        [ValidateNotNull()]
         [string]$BaseUri = $PSPDB.BaseUri
     )
     $URI = Join-Parts -Separator '/' -Parts $BaseUri, nodes, $Node, facts, $Name
@@ -25,7 +25,7 @@
     $r = Invoke-RestMethod -Uri $URI
     if($r.count -gt 0)
     {
-        $r | %{ [void]$h.set_item($_.Name, $_.Value) }
+        $r | foreach-object { [void]$h.set_item($_.Name, $_.Value) }
+        [pscustomobject]$h
     }
-    [pscustomobject]$h
 }

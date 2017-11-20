@@ -14,17 +14,6 @@ Deploy LocalModule {
             Mirror = $true
         }
     }
-
-    By platyPS docs {
-        FromSource $ENV:BHProjectPath\docs\en-US
-        To $ENV:BHBuildOutput\$ENV:BHProjectName\en-US
-        Tagged Local, AppVeyor, Build, Docs
-        WithOptions @{
-            SourceIsAbsolute = $true
-            Force = $True
-        }
-        DependingOn LocalModule-ModuleCopy
-    }
 }
 
 Deploy Module {
@@ -35,7 +24,6 @@ Deploy Module {
         WithOptions @{
             ApiKey = $ENV:NugetApiKey
         }
-        DependingOn LocalModule-docs
     }
 
     By AppVeyorModule {
@@ -45,6 +33,5 @@ Deploy Module {
         WithOptions @{
             Version = $env:APPVEYOR_BUILD_VERSION
         }
-        DependingOn Module-platyPS
     }
 }
