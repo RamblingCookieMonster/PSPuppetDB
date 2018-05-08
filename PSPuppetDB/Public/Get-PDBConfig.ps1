@@ -8,54 +8,31 @@
 
     .PARAMETER Source
         Get the config data from either...
-        
+
            Variable: the live module variable used for command defaults
-           Path:      the serialized PSRT.xml that loads when importing the module
+           Xml:      the serialized PSRT.xml that loads when importing the module
 
         Defaults to Variable
 
     .PARAMETER Path
-        If specified, read config from this XML file.
-        
-        Defaults to UserName-ComputerName-PSForeman.xml in the module root
+        If specified, read config from this XML file determined by Get-PDBConfigPath
 
     .FUNCTIONALITY
-        Foreman
+        PuppetDB
     #>
-    [cmdletbinding(DefaultParameterSetName = 'variable')]
+    [cmdletbinding()]
     param(
-        [parameter(ParameterSetName='variable')]
-        [ValidateSet("Variable","Config")]
+        [ValidateSet("Variable","Xml")]
         $Source = "Variable",
 
-        [parameter(ParameterSetName='path')]
-        [parameter(ParameterSetName='variable')]
-        $Path = "$ModuleRoot\$env:USERNAME-$env:COMPUTERNAME.xml"
+        $Path = $Script:_PDBConfigXmlPath
     )
 
-    if(-not (Test-Path -Path $Path -PathType Leaf -ErrorAction SilentlyContinue))
-    {
-        try
-        {
-            Write-Verbose "Did not find config file [$Path] attempting to create"
-            [pscustomobject]@{
-                BaseUri = $null
-                Credential = $null
-            } | Export-Clixml -Path $Path -Force -ErrorAction Stop
-        }
-        catch
-        {
-            Write-Warning $_
-            Write-Warning "Failed to create config file [$Path]"
-        }
-    }    
-    
-    if($PSCmdlet.ParameterSetName -eq 'variable' -and $Source -eq "variable" -and -not $PSBoundParameters.ContainsKey('Path'))
-    {
-        $Script:PSPDB
+    if( $Source -eq "Variable" ) {
+        $Script:PDBConfig
     }
-    else
-    {
-        Import-Clixml -Path $Path
+    else {
+        Import-Clixml -Path $Path |
+            Select-Object -Property $Script:PDBConfigProps
     }
 }

@@ -9,7 +9,7 @@ param (
     $ModuleRoot = $PSScriptRoot
 
 # Dot source the files
-# Thanks to Bartek, Constatine 
+# Thanks to Bartek, Constatine
 # https://becomelotr.wordpress.com/2017/02/13/expensive-dot-sourcing/
     Foreach($File in $FilesToLoad)
     {
@@ -35,18 +35,30 @@ param (
         }
     }
 
-#Initialize the config variable.  I know, I know...
-    Try
-    {
-        #Import the config
-        $PSPDB = $null
-        $PSPDB = Get-PDBConfig -Source Config -ErrorAction Stop
-
+Try
+{
+    #Import the config
+    $_PDBConfigXmlPath = Get-PDBConfigPath
+    $PDBConfigProps = 'BaseUri', 'Credential', 'Certificate'
+    $PDBConfig = [pscustomobject]@{} | Select-Object $PDBConfigProps
+    $PDBConfig = Get-PDBConfig -Source Config -ErrorAction Stop
+    if(-not (Test-Path -Path $_PDBConfigXmlPath -ErrorAction SilentlyContinue)) {
+        try {
+            Write-Warning "Did not find config file [$_PDBConfigXmlPath], attempting to initialize"
+            Initialize-PDBConfig -Path $_PDBConfigXmlPath -ErrorAction Stop
+        }
+        catch {
+            Write-Warning "Failed to create config file [$_PDBConfigXmlPath]: $_"
+        }
     }
-    Catch
-    {
-        Write-Warning "Error importing PSPuppetDB config"
-        Write-Warning $_
+    else {
+        $PDBConfig = Get-PDBConfig -Source Xml
     }
+}
+Catch
+{
+    Write-Warning "Error importing PSPuppetDB config"
+    Write-Warning $_
+}
 
 Export-ModuleMember -Function $Public.BaseName

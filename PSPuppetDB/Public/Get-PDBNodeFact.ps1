@@ -18,7 +18,7 @@
         $Name,
 
         [ValidateNotNull()]
-        [string]$BaseUri = $PSPDB.BaseUri
+        [string]$BaseUri = $PDBConfig.BaseUri
     )
     $URI = Join-Parts -Separator '/' -Parts $BaseUri, nodes, $Node, facts, $Name
     $h = @{}

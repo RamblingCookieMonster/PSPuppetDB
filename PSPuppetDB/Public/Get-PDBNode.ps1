@@ -8,7 +8,7 @@ function Get-PDBNode {
         Get-PDBNode host.fqdn
     #>
     [cmdletbinding()]
-    Param ( 
+    Param (
         [parameter(position=1)]
         [string]
         $Node,
@@ -17,8 +17,8 @@ function Get-PDBNode {
         [string]$FactValue,
         [validateset('=','~','>','<','>=','<=')]$FactOperator = '=',
 
-        [ValidateNotNull()] 
-        [string]$BaseUri = $PSPDB.BaseUri
+        [ValidateNotNull()]
+        [string]$BaseUri = $PDBConfig.BaseUri
     )
     $URI = Join-Parts -Separator '/' -Parts $BaseUri, nodes, $Node
     $IRMParams = @{Uri = $URI}

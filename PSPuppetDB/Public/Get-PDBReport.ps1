@@ -1,14 +1,14 @@
 ﻿function Get-PDBReport {
     <#
     .Synopsis
-        Query PuppetDB nodes
+        Query PuppetDB reports
     .DESCRIPTION
-        Query PuppetDB nodes
+        Query PuppetDB reports
     .EXAMPLE
-        Get-PDBNode host.fqdn
+        Get-PDBReport host.fqdn
     #>
     [cmdletbinding()]
-    Param ( 
+    Param (
         [parameter(position=1)]
         [string]
         $Node,
@@ -16,8 +16,8 @@
         [validateset('=','~','>','<','>=','<=')]
         $Operator = '=',
 
-        [ValidateNotNull()] 
-        [string]$BaseUri = $PSPDB.BaseUri
+        [ValidateNotNull()]
+        [string]$BaseUri = $PDBConfig.BaseUri
     )
     $URI = Join-Parts -Separator '/' -Parts $BaseUri, reports
     $IRMParams = @{Uri = $URI}
