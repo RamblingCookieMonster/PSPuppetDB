@@ -41,7 +41,7 @@ Try
     $_PDBConfigXmlPath = Get-PDBConfigPath
     $PDBConfigProps = 'BaseUri', 'Credential', 'Certificate'
     $PDBConfig = [pscustomobject]@{} | Select-Object $PDBConfigProps
-    $PDBConfig = Get-PDBConfig -Source Config -ErrorAction Stop
+    $PDBConfig = Get-PDBConfig -Source Xml -ErrorAction Stop
     if(-not (Test-Path -Path $_PDBConfigXmlPath -ErrorAction SilentlyContinue)) {
         try {
             Write-Warning "Did not find config file [$_PDBConfigXmlPath], attempting to initialize"
