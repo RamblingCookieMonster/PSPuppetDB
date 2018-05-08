@@ -11,16 +11,16 @@
     Param (
         [parameter(position=1)]
         [string]
-        $Node,
+        $Certname,
 
         [parameter(position=2)]
         [string]
-        $Name,
+        $FactName,
 
         [ValidateNotNull()]
         [string]$BaseUri = $PDBConfig.BaseUri
     )
-    $URI = Join-Parts -Separator '/' -Parts $BaseUri, nodes, $Node, facts, $Name
+    $URI = Join-Parts -Separator '/' -Parts $BaseUri, nodes, $Certname, facts, $FactName
     $h = @{}
     $r = Invoke-RestMethod -Uri $URI
     if($r.count -gt 0)
