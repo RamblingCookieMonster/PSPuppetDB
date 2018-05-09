@@ -5,7 +5,10 @@
     .DESCRIPTION
         Query PuppetDB nodes
     .EXAMPLE
-        Get-PDBNode host.fqdn
+        Get-PDBNodeFact host.fqdn
+        # Get all facts for a specified node
+    .EXAMPLE
+        Get-PDBNodeFact host.fqdn -FactName
     #>
     [cmdletbinding()]
     Param (
@@ -18,11 +21,20 @@
         $FactName,
 
         [ValidateNotNull()]
-        [string]$BaseUri = $PDBConfig.BaseUri
+        [string]$BaseUri = $PDBConfig.BaseUri,
+
+        [ValidateNotNull()]
+        [X509Certificate]$Certificate = $PDBConfig.Certificate
     )
     $URI = Join-Parts -Separator '/' -Parts $BaseUri, nodes, $Certname, facts, $FactName
     $h = @{}
-    $r = Invoke-RestMethod -Uri $URI
+    $IRMParams = @{
+        Uri = $URI
+    }
+    if($Certificate){
+        $IRMParams.add('Certificate',$Certificate)
+    }
+    $r = Invoke-RestMethod @IRMParams
     if($r.count -gt 0)
     {
         $r | foreach-object { [void]$h.set_item($_.Name, $_.Value) }

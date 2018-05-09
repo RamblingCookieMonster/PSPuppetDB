@@ -9,11 +9,10 @@ function Initialize-PDBConfig {
     .PARAMETER BaseUri
         PuppetDB BaseUri to use as default
 
-    .PARAMETER Credential
-        PuppetDB Credential to use as default
-
     .PARAMETER Certificate
         PuppetDB Certificate to use as default
+
+        This is not serialized to disk
 
     .FUNCTIONALITY
         PuppetDb
@@ -21,16 +20,12 @@ function Initialize-PDBConfig {
     [cmdletbinding()]
     param(
         [string]$BaseUri,
-        [ValidateNotNull()]
-        [System.Management.Automation.PSCredential]
-        [System.Management.Automation.Credential()]
-        $PSCredential,
+
         [string]$Path = $script:_PDBConfigXmlPath
     )
     Switch ($script:PDBConfigProps)
     {
         'BaseUri'     { $Script:PDBConfig.BaseUri = $BaseUri }
-        'Credential'  { $Script:PDBConfig.Credential = $Credential }
         'Certificate' { $Script:PDBConfig.Certificate = $Certificate }
     }
 
@@ -38,8 +33,9 @@ function Initialize-PDBConfig {
         Property = $Script:PDBConfigProps
     }
     if(-not (Test-IsWindows)) {
-        $SelectParams.Add('ExcludeProperty', 'Credential')
+        $SelectParams.Add('ExcludeProperty', 'Certificate')
     }
+
     #Write the global variable and the xml
     $Script:PDBConfig |
         Select-Object @SelectParams |

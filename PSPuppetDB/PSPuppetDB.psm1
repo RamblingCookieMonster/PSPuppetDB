@@ -39,7 +39,7 @@ Try
 {
     #Import the config
     $_PDBConfigXmlPath = Get-PDBConfigPath
-    $PDBConfigProps = 'BaseUri', 'Credential', 'Certificate'
+    $PDBConfigProps = 'BaseUri', 'Certificate'
     $PDBConfig = [pscustomobject]@{} | Select-Object $PDBConfigProps
     $PDBConfig = Get-PDBConfig -Source Xml -ErrorAction Stop
     if(-not (Test-Path -Path $_PDBConfigXmlPath -ErrorAction SilentlyContinue)) {
