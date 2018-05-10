@@ -6,4 +6,3 @@ Describe "Module Manifest Tests PS$PSVersion" {
         $? | Should Be $true
     }
 }
-

@@ -8,4 +8,3 @@ $ModuleName = $ENV:BHProjectName
 
 Remove-Module $ENV:BHProjectName -ErrorAction SilentlyContinue
 Import-Module (Join-Path $ENV:BHProjectPath $ModuleName) -Force
-
